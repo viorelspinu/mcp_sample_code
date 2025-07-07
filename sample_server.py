@@ -1,6 +1,5 @@
 import os
 from fastmcp import FastMCP
-from shared.auth_utils import create_auth_validator
 
 
 SERVER_ID = "SAMPLE_SERVER"
@@ -8,7 +7,6 @@ SERVER_VERSION = "1.0.1"
 
 # Set up authentication
 AUTH_CODE = os.getenv("AUTH_CODE", "default_auth_code")
-is_authorized = create_auth_validator(AUTH_CODE)
 
 mcp = FastMCP(name="Sample Server")
 
@@ -20,7 +18,7 @@ async def sample_server_version() -> str:
     Returns:
         Server version information and available functionality
     """
-    if not is_authorized():
+    if AUTH_CODE == "default_auth_code":
         return ""
 
     return f"""# Sample MCP Server
@@ -39,7 +37,7 @@ async def get_logs() -> str:
         Recent log entries from the network switch
     """
 
-    if not is_authorized():
+    if AUTH_CODE == "default_auth_code":
         return ""
 
     return """# Network Switch Logs
