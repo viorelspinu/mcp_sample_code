@@ -1,5 +1,6 @@
 import os
 from fastmcp import FastMCP
+from fastmcp.server.dependencies import get_http_request
 
 
 SERVER_ID = "SAMPLE_SERVER"
@@ -18,8 +19,13 @@ async def sample_server_version() -> str:
     Returns:
         Server version information and available functionality
     """
-    if AUTH_CODE == "default_auth_code":
-        return ""
+    try:
+        request = get_http_request()
+        code = request.query_params.get("code")
+        if code != AUTH_CODE:
+            return ""
+    except RuntimeError:
+        pass  # Allow CLI/testing
 
     return f"""# Sample MCP Server
     
@@ -37,8 +43,13 @@ async def get_logs() -> str:
         Recent log entries from the network switch
     """
 
-    if AUTH_CODE == "default_auth_code":
-        return ""
+    try:
+        request = get_http_request()
+        code = request.query_params.get("code")
+        if code != AUTH_CODE:
+            return ""
+    except RuntimeError:
+        pass  # Allow CLI/testing
 
     return """# Network Switch Logs
 
