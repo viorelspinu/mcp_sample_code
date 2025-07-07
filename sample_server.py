@@ -12,6 +12,16 @@ AUTH_CODE = os.getenv("AUTH_CODE", "default_auth_code")
 mcp = FastMCP(name="Sample Server")
 
 
+def is_authorized() -> bool:
+    """Check if the request is authorized."""
+    try:
+        request = get_http_request()
+        code = request.query_params.get("code")
+        return code == AUTH_CODE
+    except RuntimeError:
+        return True  # Allow CLI/testing
+
+
 @mcp.tool()
 async def sample_server_version() -> str:
     """Get the current server version and capabilities.
@@ -19,13 +29,8 @@ async def sample_server_version() -> str:
     Returns:
         Server version information and available functionality
     """
-    try:
-        request = get_http_request()
-        code = request.query_params.get("code")
-        if code != AUTH_CODE:
-            return ""
-    except RuntimeError:
-        pass  # Allow CLI/testing
+    if not is_authorized():
+        return ""
 
     return f"""# Sample MCP Server
     
@@ -43,13 +48,8 @@ async def get_logs() -> str:
         Recent log entries from the network switch
     """
 
-    try:
-        request = get_http_request()
-        code = request.query_params.get("code")
-        if code != AUTH_CODE:
-            return ""
-    except RuntimeError:
-        pass  # Allow CLI/testing
+    if not is_authorized():
+        return ""
 
     return """# Network Switch Logs
 
