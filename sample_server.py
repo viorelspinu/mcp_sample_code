@@ -19,7 +19,7 @@ def is_authorized() -> bool:
         code = request.query_params.get("code")
         return code == AUTH_CODE
     except RuntimeError:
-        return True  # Allow CLI/testing
+        return False  # Deny access if no HTTP context
 
 
 @mcp.tool()
