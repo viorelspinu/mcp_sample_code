@@ -8,6 +8,11 @@ SERVER_VERSION = "1.0.1"
 
 # Set up authentication
 AUTH_CODE = os.getenv("AUTH_CODE")
+if not AUTH_CODE:
+    print("❌ Error: AUTH_CODE environment variable is not set!")
+    print("Please set AUTH_CODE environment variable before starting the server.")
+    print("Example: export AUTH_CODE=your_secret_code")
+    exit(1)
 
 mcp = FastMCP(name="Sample Server")
 
@@ -66,13 +71,6 @@ async def get_logs() -> str:
 
 
 if __name__ == "__main__":
-    # Check if AUTH_CODE is set
-    if not AUTH_CODE:
-        print("❌ Error: AUTH_CODE environment variable is not set!")
-        print("Please set AUTH_CODE environment variable before starting the server.")
-        print("Example: export AUTH_CODE=your_secret_code")
-        exit(1)
-    
     print(f"🔐 Server starting with AUTH_CODE: {AUTH_CODE}")
     
     mcp.run(
