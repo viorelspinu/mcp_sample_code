@@ -111,7 +111,7 @@ All API endpoints require authentication via the `AUTH_CODE` environment variabl
 1. **Start the server** with `./start_mcp.sh`
 2. **Copy the provided URL** (includes auth code)
 3. **In Claude.ai:**
-   - Go to Settings → Feature Preview
+   - Go to https://claude.ai/settings/integrations
    - Add MCP server with the provided URL
    - The server will be immediately available
 
